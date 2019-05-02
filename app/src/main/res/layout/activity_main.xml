@@ -8,15 +8,14 @@
         tools:context=".MainActivity"
         android:background="@color/colorPrimaryDark">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+    <com.example.ledtimerindicator.CustomViews.LedIndicatorView
+            android:id="@+id/first_led_view"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
             app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
     />
 
     <com.example.ledtimerindicator.CustomViews.TimerInputEditText
@@ -32,6 +31,7 @@
             android:inputType="number"
             android:hint="@string/timer_input_hint"
             android:maxLength="3"
+            android:focusedByDefault="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             tools:text="129"

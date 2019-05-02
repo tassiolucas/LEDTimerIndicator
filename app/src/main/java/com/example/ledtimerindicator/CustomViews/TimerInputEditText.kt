@@ -22,15 +22,9 @@ class TimerInputEditText : EditText {
     }
 
     private fun init(context: Context) {
-
     }
 
     override fun onKeyPreIme(keyCode: Int, event: KeyEvent?): Boolean {
         return super.onKeyPreIme(keyCode, event)
-
-        if (this.isCursorVisible)
-            this.isCursorVisible = false
-
-        this.setTextColor(resources.getColor(R.color.hint_imput))
     }
 }
