@@ -8,20 +8,22 @@ import android.util.AttributeSet
 import android.view.View
 import com.example.ledtimerindicator.R
 
-class LedIndicatorView : View {
+class LedDisplayView : View {
 
-    lateinit var ledPaint: Paint
-    lateinit var ledTwo: Paint
-    lateinit var ledThree: Paint
-    lateinit var ledFour: Paint
-    lateinit var ledFive: Paint
-    lateinit var ledSix: Paint
-    lateinit var ledSeven: Paint
+    lateinit private var ledPaint: Paint
+    lateinit private var ledTwo: Paint
+    lateinit private var ledThree: Paint
+    lateinit private var ledFour: Paint
+    lateinit private var ledFive: Paint
+    lateinit private var ledSix: Paint
+    lateinit private var ledSeven: Paint
 
-    var ledStartX: Float = 0.0F
-    var ledStartY: Float = 0.0F
-    var ledStopX: Float = 0.0F
-    var ledStopY: Float = 0.0F
+    private var ledStartX: Float = 0.0F
+    private var ledStartY: Float = 0.0F
+    private var ledStopX: Float = 0.0F
+    private var ledStopY: Float = 0.0F
+
+    private var value = 0
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -44,8 +46,6 @@ class LedIndicatorView : View {
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         initPaints(width.toFloat(), height.toFloat())
-
-        invalidate()
     }
 
     private fun initPaints(widthMeasure: Float, heightMeasure: Float) {
@@ -58,7 +58,11 @@ class LedIndicatorView : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        setScreenValue(canvas!!, 9)
+        setDrawValue(canvas!!, value)
+    }
+
+    fun setScreenValue(value: Int) {
+        this.value = value
 
         invalidate()
     }
@@ -147,7 +151,7 @@ class LedIndicatorView : View {
             ledPaint.color = ContextCompat.getColor(context, R.color.colorAccentDark)
     }
 
-    internal fun setScreenValue(canvas: Canvas, value: Int) {
+    private fun setDrawValue(canvas: Canvas, value: Int) {
         when(value) {
             0 -> {
                 setLedOne(canvas, true)
@@ -159,13 +163,13 @@ class LedIndicatorView : View {
                 setLedSeven(canvas, true)
             }
             1 -> {
-                setLedOne(canvas, true)
+                setLedOne(canvas, false)
                 setLedTwo(canvas, false)
-                setLedThree(canvas, false)
-                setLedFour(canvas, true)
+                setLedThree(canvas, true)
+                setLedFour(canvas, false)
                 setLedFive(canvas, false)
                 setLedSix(canvas, false)
-                setLedSeven(canvas, false)
+                setLedSeven(canvas, true)
             }
             2 -> {
                 setLedOne(canvas, false)
