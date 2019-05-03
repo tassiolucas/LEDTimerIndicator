@@ -10,8 +10,9 @@
 
     <com.example.ledtimerindicator.CustomViews.LedIndicatorView
             android:id="@+id/first_led_view"
-            android:layout_width="100dp"
+            android:layout_width="85dp"
             android:layout_height="150dp"
+            android:backgroundTint="@color/hint_imput"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
