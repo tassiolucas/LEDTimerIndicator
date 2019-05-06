@@ -3,6 +3,7 @@
     <dimen name="timer_imput_width">275dp</dimen>
     <dimen name="ok_button_width">90dp</dimen>
     <dimen name="timer_imput_padding">10dp</dimen>
+    <dimen name="led_display_margin">20dp</dimen>
     <dimen name="timer_imput_margin">30dp</dimen>
     <dimen name="start_timer_padding">10dp</dimen>
 </resources>

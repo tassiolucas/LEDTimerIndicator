@@ -145,10 +145,14 @@ class LedDisplayView : View {
     }
 
     private fun setLedState(isOn: Boolean) {
-        if (isOn)
+        if (isOn) {
             ledPaint.color = ContextCompat.getColor(context, R.color.colorAccent)
-        else
+            ledPaint.alpha = 255
+        }
+        else {
             ledPaint.color = ContextCompat.getColor(context, R.color.colorAccentDark)
+            ledPaint.alpha = 127
+        }
     }
 
     private fun setDrawValue(canvas: Canvas, value: Int) {
