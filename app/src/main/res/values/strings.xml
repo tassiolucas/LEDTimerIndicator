@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">LED Timer Indicator</string>
+    <string name="app_name">Studio Sol - Cronômetro Regressivo</string>
     <string name="ok_label">OK</string>
     <string name="start_timer_label">START TIMER</string>
     <string name="timer_in_progress">TIMER IN PROGRESS</string>
     <string name="timer_input_hint">Digite o valor</string>
+    <string name="color_picker_title">Selecione a cor dos segmentos:</string>
+    <string name="color_picker_positive_label">Selecionar</string>
+    <string name="color_picker_negative_label">Cancelar</string>
 </resources>
