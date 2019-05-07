@@ -3,6 +3,7 @@ package com.example.ledtimerindicator
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.PorterDuff
+import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
@@ -12,13 +13,21 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.example.ledtimerindicator.Backend.CountTimerManager
-import com.example.ledtimerindicator.CustomViews.LedDisplayView
 import com.example.ledtimerindicator.Frontend.LedDisplayManager
 import com.example.ledtimerindicator.Interfaces.CountTimerListener
 import com.madrapps.pikolo.HSLColorPicker
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
+import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.support.annotation.RequiresApi
+
 
 class MainActivity : AppCompatActivity() {
+
+    private val LED_SIZE_MAX_STEPS = 4
+    private val LED_SIZE_INCREMENT_DIFF = 1
+    private val ZERO_FLAG = 0
 
     private lateinit var rootView: View
     private lateinit var timerInputContainer: View
@@ -31,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var countTimerListener: CountTimerListener
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,6 +51,10 @@ class MainActivity : AppCompatActivity() {
         timerInput = findViewById(R.id.timer_imput)
         colorChangeButton = findViewById(R.id.button_led_color_change)
         ledSizeChangeButton = findViewById(R.id.button_font_size_change)
+
+        okButton.background = getBackgroundDrawable(getColor(R.color.colorAccent), getResources().getDrawable(R.drawable.button_ripple_effect))
+        startTimerButton.background = getBackgroundDrawable(getColor(R.color.colorAccent), getResources().getDrawable(R.drawable.button_ripple_effect))
+        timerInput.setTextColor(getColor(R.color.white))
 
         ledDisplayManager = LedDisplayManager(this)
 
@@ -94,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         startTimerButton.setOnClickListener {
-            if (CountTimerManager.getTimeSeconds() >= 1) {
+            if (CountTimerManager.getTimeSeconds() >= CountTimerManager.MINIMUM_SECOND) {
                 CountTimerManager.start()
             }
         }
@@ -110,10 +124,15 @@ class MainActivity : AppCompatActivity() {
             colorFeedback.setColorFilter(ledDisplayManager.getLedsColor())
 
             colorPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
+                @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                 override fun onColorSelected(color: Int) {
                     super.onColorSelected(color)
                     colorFeedback.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
                     ledDisplayManager.setLedsColor(color)
+
+                    var backgroundDrawable = getBackgroundDrawable(color, getResources().getDrawable(R.drawable.button_ripple_effect))
+                    okButton.background = backgroundDrawable
+                    startTimerButton.background = backgroundDrawable
                 }
             })
 
@@ -126,8 +145,8 @@ class MainActivity : AppCompatActivity() {
 
             var ledSizeSeekBar = ledSizeChangeDialog.findViewById<SeekBar>(R.id.led_size_selector)
 
-            ledSizeSeekBar.max = 4
-            ledSizeSeekBar.incrementProgressBy(1)
+            ledSizeSeekBar.max = LED_SIZE_MAX_STEPS
+            ledSizeSeekBar.incrementProgressBy(LED_SIZE_INCREMENT_DIFF)
             ledSizeSeekBar.progress = ledDisplayManager.getLedsReferenceSize()
 
             ledSizeSeekBar.progressDrawable.setColorFilter(ledDisplayManager.getLedsColor(), PorterDuff.Mode.SRC_IN)
@@ -136,7 +155,6 @@ class MainActivity : AppCompatActivity() {
             ledSizeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     ledDisplayManager.setLedsSize(progress)
-
                     Log.d("Progress", progress.toString())
                 }
 
@@ -158,6 +176,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideKeyboard(activity: Activity) {
         var imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(this.rootView.windowToken, 0)
+        imm.hideSoftInputFromWindow(this.rootView.windowToken, ZERO_FLAG)
     }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    fun getBackgroundDrawable(pressedColor: Int, backgroundDrawable: Drawable): RippleDrawable {
+        return RippleDrawable(getPressedState(pressedColor), backgroundDrawable, null)
+    }
+
+    fun getPressedState(pressedColor: Int): ColorStateList {
+        return ColorStateList(arrayOf(intArrayOf()), intArrayOf(pressedColor))
+    }
+
 }

@@ -9,15 +9,15 @@
     <com.madrapps.pikolo.HSLColorPicker
             android:id="@+id/color_picker"
             android:layout_width="wrap_content"
-            android:layout_height="400dp"
+            android:layout_height="@dimen/color_picker_height"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
             android:id="@+id/color_feedback"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/color_picker_height_and_width"
+            android:layout_height="@dimen/color_picker_height_and_width"
             android:src="@drawable/circle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

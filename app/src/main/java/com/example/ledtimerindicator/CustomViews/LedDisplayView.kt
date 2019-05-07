@@ -2,17 +2,24 @@ package com.example.ledtimerindicator.CustomViews
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
-import android.support.constraint.ConstraintLayout
+import android.os.Build
+import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import com.example.ledtimerindicator.R
 
 class LedDisplayView : View {
+
+    private val SIZE_STEPS = 5
+    private val FULL_ALPHA = 255
+    private val LITTLE_ALPHA = 31
+    private val DELTA = 22.5
+    private val DOUBLE = 2
+    private val QUADRUPLE = 4
+    private val CORNER_RADIUS = 10F
 
     lateinit private var ledPaint: Paint
 
@@ -30,6 +37,9 @@ class LedDisplayView : View {
     private var ledViewHeightPiece = 0
 
     private var referenceSize = 2
+    private var referenceStrokeWidth = 15F
+
+    private var ledViewStrokeWidthPiece = (referenceStrokeWidth / SIZE_STEPS)
 
     private var isFirstMeasure = true
 
@@ -54,8 +64,8 @@ class LedDisplayView : View {
         super.onLayout(changed, left, top, right, bottom)
 
         if (isFirstMeasure) {
-            ledViewWidthPiece = width / 5
-            ledViewHeightPiece = height / 5
+            ledViewWidthPiece = width / SIZE_STEPS
+            ledViewHeightPiece = height / SIZE_STEPS
             isFirstMeasure = false
         }
 
@@ -65,10 +75,11 @@ class LedDisplayView : View {
     private fun initPaints() {
         ledPaint = Paint()
         ledPaint.style = Paint.Style.FILL_AND_STROKE
-        ledPaint.strokeWidth = 25F
-        ledPaint.alpha = 255
+        ledPaint.strokeWidth = referenceStrokeWidth
+        ledPaint.alpha = FULL_ALPHA
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
@@ -81,96 +92,103 @@ class LedDisplayView : View {
         invalidate()
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedOne(canvas: Canvas, isOn: Boolean) {
-        ledStartX = ((width / 22.5) * 2).toFloat()
-        ledStartY = ((height / 22.5) * 2).toFloat()
-        ledStopX = ((width / 22.5) * 2).toFloat()
-        ledStopY = ((height / 2) - (height / 22.5)).toFloat()
+        ledStartX = ((width / DELTA) * DOUBLE).toFloat()
+        ledStartY = ((height / DELTA) * DOUBLE).toFloat()
+        ledStopX = ((width / DELTA) * DOUBLE).toFloat()
+        ledStopY = ((height / DOUBLE) - (height / DELTA)).toFloat()
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, 10F, 10F, ledPaint)
+        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedTwo(canvas: Canvas, isOn: Boolean) {
-        ledStartX = ((width / 22.5) * 4).toFloat()
-        ledStartY = (height / 22.5).toFloat()
-        ledStopX = (width.toFloat() - ((width.toFloat() / 22.5) * 4)).toFloat()
-        ledStopY = (height / 22.5).toFloat()
+        ledStartX = ((width / DELTA) * QUADRUPLE).toFloat()
+        ledStartY = (height / DELTA).toFloat()
+        ledStopX = (width.toFloat() - ((width.toFloat() / DELTA) * QUADRUPLE)).toFloat()
+        ledStopY = (height / DELTA).toFloat()
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, 10F, 10F, ledPaint)
+        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedThree(canvas: Canvas, isOn: Boolean) {
-        ledStartX = (width.toFloat() - ((width.toFloat() / 22.5) * 2)).toFloat()
-        ledStartY = ((height / 22.5) * 2).toFloat()
-        ledStopX = (width - (width.toFloat() / 22.5) * 2).toFloat()
-        ledStopY = ((height / 2) - (height / 22.5)).toFloat()
+        ledStartX = (width.toFloat() - ((width.toFloat() / DELTA) * DOUBLE)).toFloat()
+        ledStartY = ((height / DELTA) * DOUBLE).toFloat()
+        ledStopX = (width - (width.toFloat() / DELTA) * DOUBLE).toFloat()
+        ledStopY = ((height / DOUBLE) - (height / DELTA)).toFloat()
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, 10F, 10F, ledPaint)
+        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedFour(canvas: Canvas, isOn: Boolean) {
-        ledStartX = (height / 22.5).toFloat()
-        ledStartY = ((height / 2) + (height / 22.5)).toFloat()
-        ledStopX = (height / 22.5).toFloat()
-        ledStopY = (height - ((height / 22.5) * 2)).toFloat()
+        ledStartX = (height / DELTA).toFloat()
+        ledStartY = ((height / DOUBLE) + (height / DELTA)).toFloat()
+        ledStopX = (height / DELTA).toFloat()
+        ledStopY = (height - ((height / DELTA) * DOUBLE)).toFloat()
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, 10F, 10F, ledPaint)
+        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedFive(canvas: Canvas, isOn: Boolean) {
-        ledStartX = ((width / 22.5) * 4).toFloat()
-        ledStartY = (height / 2).toFloat()
-        ledStopX = (width - (width / 22.5) * 4).toFloat()
-        ledStopY = (height / 2).toFloat()
+        ledStartX = ((width / DELTA) * QUADRUPLE).toFloat()
+        ledStartY = (height / DOUBLE).toFloat()
+        ledStopX = (width - (width / DELTA) * QUADRUPLE).toFloat()
+        ledStopY = (height / DOUBLE).toFloat()
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, 10F, 10F, ledPaint)
+        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedSix(canvas: Canvas, isOn: Boolean) {
-        ledStartX = ((width / 22.5) * 4).toFloat()
-        ledStartY = (height - (height / 22.5)).toFloat()
-        ledStopX = (width - ((width / 22.5) * 4)).toFloat()
-        ledStopY = (height - (height / 22.5)).toFloat()
+        ledStartX = ((width / DELTA) * QUADRUPLE).toFloat()
+        ledStartY = (height - (height / DELTA)).toFloat()
+        ledStopX = (width - ((width / DELTA) * QUADRUPLE)).toFloat()
+        ledStopY = (height - (height / DELTA)).toFloat()
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, 10F, 10F, ledPaint)
+        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedSeven(canvas: Canvas, isOn: Boolean) {
-        ledStartX = (width - ((width / 22.5) * 2)).toFloat()
-        ledStartY = ((height / 2) + (height / 22.5)).toFloat()
-        ledStopX = (width - ((width / 22.5) * 2)).toFloat()
-        ledStopY = (height - ((height / 22.5) * 2)).toFloat()
+        ledStartX = (width - ((width / DELTA) * DOUBLE)).toFloat()
+        ledStartY = ((height / DOUBLE) + (height / DELTA)).toFloat()
+        ledStopX = (width - ((width / DELTA) * DOUBLE)).toFloat()
+        ledStopY = (height - ((height / DELTA) * DOUBLE)).toFloat()
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, 10F, 10F, ledPaint)
+        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
     }
 
     private fun setLedState(isOn: Boolean) {
         if (isOn) {
             ledPaint.color = ledColorOn
-            ledPaint.alpha = 255
+            ledPaint.alpha = FULL_ALPHA
         }
         else {
             ledPaint.color = ledColorOff
-            ledPaint.alpha = 31
+            ledPaint.alpha = LITTLE_ALPHA
         }
     }
 
     fun getLedColor() : Int {
-        return ledPaint.color
+        return ledColorOn
     }
 
     fun setLedColor(color: Int) {
@@ -191,17 +209,22 @@ class LedDisplayView : View {
             layoutParams.width = layoutParams.width + ledViewWidthPiece
             layoutParams.height = layoutParams.height + ledViewHeightPiece
 
+            referenceStrokeWidth += ledViewStrokeWidthPiece
+
             this.layoutParams = layoutParams
             referenceSize = size
         } else if (size < referenceSize) {
             layoutParams.width = layoutParams.width - ledViewWidthPiece
             layoutParams.height = layoutParams.height - ledViewHeightPiece
 
+            referenceStrokeWidth -= ledViewStrokeWidthPiece
+
             this.layoutParams = layoutParams
             referenceSize = size
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setDrawValue(canvas: Canvas, value: Int) {
         when(value) {
             0 -> {

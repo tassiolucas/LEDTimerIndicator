@@ -8,6 +8,14 @@ import com.example.ledtimerindicator.R
 
 class LedDisplayManager(activity: Activity) {
 
+    private val FIRST_INDEX = 0
+    private val FIRST = 1
+    private val SECOND = 2
+    private val THIRD = 3
+    private val BASE_INDEX_MOD = 10
+    private val SECOND_DIGIT_INDEX = 10
+    private val THIRD_DIGIT_INDEX = 100
+
     private var firstDisplayLed: LedDisplayView = activity.findViewById(R.id.first_led_view)
     private var secondDisplayLed : LedDisplayView = activity.findViewById(R.id.second_led_view)
     private var thirdDisplayLed : LedDisplayView = activity.findViewById(R.id.third_led_view)
@@ -18,20 +26,20 @@ class LedDisplayManager(activity: Activity) {
 
     @SuppressLint("Range")
     fun setTime(time: String) {
-        val digits = time.trim().split("\\s*,\\s*")[0]
+        val digits = time.trim().split("\\s*,\\s*")[FIRST_INDEX]
 
-        if (digits.length >= 1) {
-            firstDigit = digits.toInt() % 10
+        if (digits.length >= FIRST) {
+            firstDigit = digits.toInt() % BASE_INDEX_MOD
         }
 
-        if (digits.length >= 2) {
-            secondDigit = (digits.toInt() / 10) % 10
+        if (digits.length >= SECOND) {
+            secondDigit = (digits.toInt() / SECOND_DIGIT_INDEX) % BASE_INDEX_MOD
             secondDisplayLed.visibility = View.VISIBLE
         }
         else secondDisplayLed.visibility = View.GONE
 
-        if (digits.length >= 3) {
-            thirdDigit = (digits.toInt() / 100) % 10
+        if (digits.length >= THIRD) {
+            thirdDigit = (digits.toInt() / THIRD_DIGIT_INDEX) % BASE_INDEX_MOD
             thirdDisplayLed.visibility = View.VISIBLE
         }
         else thirdDisplayLed.visibility = View.GONE
