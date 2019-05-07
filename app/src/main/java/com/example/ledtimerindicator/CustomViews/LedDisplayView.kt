@@ -2,21 +2,19 @@ package com.example.ledtimerindicator.CustomViews
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import com.example.ledtimerindicator.R
 
 class LedDisplayView : View {
 
     lateinit private var ledPaint: Paint
-    lateinit private var ledTwo: Paint
-    lateinit private var ledThree: Paint
-    lateinit private var ledFour: Paint
-    lateinit private var ledFive: Paint
-    lateinit private var ledSix: Paint
-    lateinit private var ledSeven: Paint
 
     private var ledStartX: Float = 0.0F
     private var ledStartY: Float = 0.0F
@@ -24,6 +22,16 @@ class LedDisplayView : View {
     private var ledStopY: Float = 0.0F
 
     private var value = 0
+
+    private var ledColorOn = 0
+    private var ledColorOff = 0
+
+    private var ledViewWidthPiece = 0
+    private var ledViewHeightPiece = 0
+
+    private var referenceSize = 2
+
+    private var isFirstMeasure = true
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -38,17 +46,23 @@ class LedDisplayView : View {
     }
 
     private fun init(context: Context) {
-        invalidate()
-
-        this.setBackgroundColor(resources.getColor(R.color.hint_imput))
+        ledColorOn = ContextCompat.getColor(context, R.color.colorAccent)
+        ledColorOff = ContextCompat.getColor(context, R.color.colorAccentDark)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        initPaints(width.toFloat(), height.toFloat())
+
+        if (isFirstMeasure) {
+            ledViewWidthPiece = width / 5
+            ledViewHeightPiece = height / 5
+            isFirstMeasure = false
+        }
+
+        initPaints()
     }
 
-    private fun initPaints(widthMeasure: Float, heightMeasure: Float) {
+    private fun initPaints() {
         ledPaint = Paint()
         ledPaint.style = Paint.Style.FILL_AND_STROKE
         ledPaint.strokeWidth = 25F
@@ -146,12 +160,45 @@ class LedDisplayView : View {
 
     private fun setLedState(isOn: Boolean) {
         if (isOn) {
-            ledPaint.color = ContextCompat.getColor(context, R.color.colorAccent)
+            ledPaint.color = ledColorOn
             ledPaint.alpha = 255
         }
         else {
-            ledPaint.color = ContextCompat.getColor(context, R.color.colorAccentDark)
-            ledPaint.alpha = 127
+            ledPaint.color = ledColorOff
+            ledPaint.alpha = 31
+        }
+    }
+
+    fun getLedColor() : Int {
+        return ledPaint.color
+    }
+
+    fun setLedColor(color: Int) {
+        ledColorOn = color
+        ledColorOff = color
+
+        invalidate()
+    }
+
+    fun getLedSize() : Int {
+        return referenceSize
+    }
+
+    fun setLayoutDimen(size: Int) {
+        val layoutParams = this.layoutParams
+
+        if (size > referenceSize) {
+            layoutParams.width = layoutParams.width + ledViewWidthPiece
+            layoutParams.height = layoutParams.height + ledViewHeightPiece
+
+            this.layoutParams = layoutParams
+            referenceSize = size
+        } else if (size < referenceSize) {
+            layoutParams.width = layoutParams.width - ledViewWidthPiece
+            layoutParams.height = layoutParams.height - ledViewHeightPiece
+
+            this.layoutParams = layoutParams
+            referenceSize = size
         }
     }
 

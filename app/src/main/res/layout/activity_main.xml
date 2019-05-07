@@ -17,19 +17,20 @@
             android:layout_margin="@dimen/buttons_controler_container_margin">
 
         <ImageButton
-                android:id="@+id/button_led_color_change"
-                android:layout_width="@dimen/buttons_controler_container_size"
-                android:layout_height="@dimen/buttons_controler_container_size"
-                android:background="@drawable/baseline_palette_white"
-                android:layout_marginRight="@dimen/buttons_controler_container_margin"
-        />
-
-        <ImageButton
                 android:id="@+id/button_font_size_change"
                 android:layout_width="@dimen/buttons_controler_container_size"
                 android:layout_height="@dimen/buttons_controler_container_size"
                 android:background="@drawable/baseline_format_size_white"
-                android:layout_toRightOf="@id/button_led_color_change"/>
+                android:layout_marginRight="@dimen/buttons_controler_container_margin"
+                />
+
+        <ImageButton
+                android:id="@+id/button_led_color_change"
+                android:layout_width="@dimen/buttons_controler_container_size"
+                android:layout_height="@dimen/buttons_controler_container_size"
+                android:background="@drawable/baseline_palette_white"
+                android:layout_toRightOf="@id/button_font_size_change"
+        />
 
     </RelativeLayout>
 
@@ -46,24 +47,24 @@
 
         <com.example.ledtimerindicator.CustomViews.LedDisplayView
                 android:id="@+id/third_led_view"
-                android:layout_width="85dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/led_view_width"
+                android:layout_height="@dimen/led_view_height"
                 android:layout_margin="@dimen/led_display_margin"
                 android:backgroundTint="@color/colorPrimaryDark"
         />
 
         <com.example.ledtimerindicator.CustomViews.LedDisplayView
                 android:id="@+id/second_led_view"
-                android:layout_width="85dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/led_view_width"
+                android:layout_height="@dimen/led_view_height"
                 android:layout_margin="@dimen/led_display_margin"
                 android:backgroundTint="@color/colorPrimaryDark"
         />
 
         <com.example.ledtimerindicator.CustomViews.LedDisplayView
                 android:id="@+id/first_led_view"
-                android:layout_width="85dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/led_view_width"
+                android:layout_height="@dimen/led_view_height"
                 android:layout_margin="@dimen/led_display_margin"
                 android:backgroundTint="@color/colorPrimaryDark"
         />

@@ -10,4 +10,14 @@
     <dimen name="led_display_margin">10dp</dimen>
     <dimen name="timer_imput_margin">30dp</dimen>
     <dimen name="buttons_controler_container_margin">15dp</dimen>
+    <dimen name="led_size_selector_margin">30dp</dimen>
+
+    <dimen name="led_view_width">68dp</dimen>
+    <dimen name="led_view_height">120dp</dimen>
+
+    <!--max width 68dp-->
+    <!--min height 120dp-->
+    <!--max width 85dp-->
+    <!--min height 150dp-->
+
 </resources>

@@ -1,14 +1,20 @@
 package com.example.ledtimerindicator.Frontend
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.view.View
 import com.example.ledtimerindicator.CustomViews.LedDisplayView
+import com.example.ledtimerindicator.R
 
-class LedDisplayManager(var firstDisplayLed: LedDisplayView, var secondDisplayLed : LedDisplayView, var thirdDisplayLed : LedDisplayView) {
+class LedDisplayManager(activity: Activity) {
 
-    var firstDigit = 0
-    var secondDigit = 0
-    var thirdDigit = 0
+    private var firstDisplayLed: LedDisplayView = activity.findViewById(R.id.first_led_view)
+    private var secondDisplayLed : LedDisplayView = activity.findViewById(R.id.second_led_view)
+    private var thirdDisplayLed : LedDisplayView = activity.findViewById(R.id.third_led_view)
+
+    private var firstDigit = 0
+    private var secondDigit = 0
+    private var thirdDigit = 0
 
     @SuppressLint("Range")
     fun setTime(time: String) {
@@ -33,5 +39,25 @@ class LedDisplayManager(var firstDisplayLed: LedDisplayView, var secondDisplayLe
         firstDisplayLed.setScreenValue(firstDigit)
         secondDisplayLed.setScreenValue(secondDigit)
         thirdDisplayLed.setScreenValue(thirdDigit)
+    }
+
+    fun getLedsColor() : Int {
+        return firstDisplayLed.getLedColor()
+    }
+
+    fun setLedsColor(color: Int) {
+        firstDisplayLed.setLedColor(color)
+        secondDisplayLed.setLedColor(color)
+        thirdDisplayLed.setLedColor(color)
+    }
+
+    fun setLedsSize(size: Int) {
+        firstDisplayLed.setLayoutDimen(size)
+        secondDisplayLed.setLayoutDimen(size)
+        thirdDisplayLed.setLayoutDimen(size)
+    }
+
+    fun getLedsReferenceSize() : Int {
+        return firstDisplayLed.getLedSize()
     }
 }

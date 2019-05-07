@@ -6,6 +6,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -25,9 +26,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var startTimerButton: Button
     private lateinit var timerInput: EditText
     private lateinit var ledDisplayManager: LedDisplayManager
-    private lateinit var firstDisplayLed: LedDisplayView
-    private lateinit var secondDisplayLed: LedDisplayView
-    private lateinit var thirdDisplayLed: LedDisplayView
     private lateinit var colorChangeButton: ImageButton
     private lateinit var ledSizeChangeButton: ImageButton
 
@@ -41,14 +39,10 @@ class MainActivity : AppCompatActivity() {
         okButton = findViewById(R.id.ok_button)
         startTimerButton = findViewById(R.id.start_timer_button)
         timerInput = findViewById(R.id.timer_imput)
-        firstDisplayLed = findViewById(R.id.first_led_view)
-        secondDisplayLed = findViewById(R.id.second_led_view)
-        thirdDisplayLed = findViewById(R.id.third_led_view)
         colorChangeButton = findViewById(R.id.button_led_color_change)
         ledSizeChangeButton = findViewById(R.id.button_font_size_change)
 
-        ledDisplayManager =
-            LedDisplayManager(firstDisplayLed, secondDisplayLed, thirdDisplayLed)
+        ledDisplayManager = LedDisplayManager(this)
 
         countTimerListener = object : CountTimerListener {
             override fun onStartCount() {
@@ -106,21 +100,52 @@ class MainActivity : AppCompatActivity() {
         }
 
         colorChangeButton.setOnClickListener {
-            var colorDialog = Dialog(this)
-            colorDialog.setContentView(R.layout.color_change_dialog)
-            colorDialog.setTitle(R.string.color_picker_title)
+            var colorChangeDialog = Dialog(this)
+            colorChangeDialog.setContentView(R.layout.color_change_dialog)
 
-            var colorPicker = colorDialog.findViewById<HSLColorPicker>(R.id.color_picker)
-            var colorFeedback = colorDialog.findViewById<ImageView>(R.id.color_feedback)
+            var colorPicker = colorChangeDialog.findViewById<HSLColorPicker>(R.id.color_picker)
+            var colorFeedback = colorChangeDialog.findViewById<ImageView>(R.id.color_feedback)
+
+            colorPicker.setColor(ledDisplayManager.getLedsColor())
+            colorFeedback.setColorFilter(ledDisplayManager.getLedsColor())
 
             colorPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
                 override fun onColorSelected(color: Int) {
                     super.onColorSelected(color)
                     colorFeedback.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
+                    ledDisplayManager.setLedsColor(color)
                 }
             })
 
-            colorDialog.show()
+            colorChangeDialog.show()
+        }
+
+        ledSizeChangeButton.setOnClickListener {
+            var ledSizeChangeDialog = Dialog(this)
+            ledSizeChangeDialog.setContentView(R.layout.led_size_change_dialog)
+
+            var ledSizeSeekBar = ledSizeChangeDialog.findViewById<SeekBar>(R.id.led_size_selector)
+
+            ledSizeSeekBar.max = 4
+            ledSizeSeekBar.incrementProgressBy(1)
+            ledSizeSeekBar.progress = ledDisplayManager.getLedsReferenceSize()
+
+            ledSizeSeekBar.progressDrawable.setColorFilter(ledDisplayManager.getLedsColor(), PorterDuff.Mode.SRC_IN)
+            ledSizeSeekBar.thumb.setColorFilter(ledDisplayManager.getLedsColor(), PorterDuff.Mode.SRC_IN)
+
+            ledSizeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    ledDisplayManager.setLedsSize(progress)
+
+                    Log.d("Progress", progress.toString())
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) { }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) { }
+            })
+
+            ledSizeChangeDialog.show()
         }
     }
 
