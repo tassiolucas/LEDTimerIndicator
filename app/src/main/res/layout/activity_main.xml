@@ -77,7 +77,6 @@
             android:text="@string/start_timer_label"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:background="@drawable/button_ripple_effect"
             app:layout_constraintTop_toBottomOf="@id/count_timer_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +116,6 @@
                 android:text="@string/ok_label"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:background="@drawable/button_ripple_effect"
                 android:layout_toRightOf="@id/timer_imput"
                 tools:targetApi="lollipop"
         />

@@ -21,6 +21,7 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.RequiresApi
+import android.support.v4.content.ContextCompat
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var countTimerListener: CountTimerListener
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,9 +52,21 @@ class MainActivity : AppCompatActivity() {
         colorChangeButton = findViewById(R.id.button_led_color_change)
         ledSizeChangeButton = findViewById(R.id.button_font_size_change)
 
-        okButton.background = getBackgroundDrawable(getColor(R.color.colorAccent), getResources().getDrawable(R.drawable.button_ripple_effect))
-        startTimerButton.background = getBackgroundDrawable(getColor(R.color.colorAccent), getResources().getDrawable(R.drawable.button_ripple_effect))
-        timerInput.setTextColor(getColor(R.color.white))
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            okButton.background = getBackgroundDrawable(
+                ContextCompat.getColor(this, R.color.colorAccent),
+                getResources().getDrawable(R.drawable.button_ripple_effect)
+            )
+            startTimerButton.background = getBackgroundDrawable(
+                ContextCompat.getColor(this, R.color.colorAccent),
+                getResources().getDrawable(R.drawable.button_ripple_effect)
+            )
+        } else {
+            okButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+            startTimerButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        }
+
+        timerInput.setTextColor(ContextCompat.getColor(this, R.color.white))
 
         ledDisplayManager = LedDisplayManager(this)
 
@@ -124,15 +136,20 @@ class MainActivity : AppCompatActivity() {
             colorFeedback.setColorFilter(ledDisplayManager.getLedsColor())
 
             colorPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
-                @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                 override fun onColorSelected(color: Int) {
                     super.onColorSelected(color)
                     colorFeedback.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
                     ledDisplayManager.setLedsColor(color)
 
-                    var backgroundDrawable = getBackgroundDrawable(color, getResources().getDrawable(R.drawable.button_ripple_effect))
-                    okButton.background = backgroundDrawable
-                    startTimerButton.background = backgroundDrawable
+                    if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                        okButton.background =
+                            getBackgroundDrawable(color, getResources().getDrawable(R.drawable.button_ripple_effect))
+                        startTimerButton.background =
+                            getBackgroundDrawable(color, getResources().getDrawable(R.drawable.button_ripple_effect))
+                    } else {
+                        okButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorPrimaryDark))
+                        startTimerButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorPrimaryDark))
+                    }
                 }
             })
 
@@ -155,7 +172,6 @@ class MainActivity : AppCompatActivity() {
             ledSizeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     ledDisplayManager.setLedsSize(progress)
-                    Log.d("Progress", progress.toString())
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) { }

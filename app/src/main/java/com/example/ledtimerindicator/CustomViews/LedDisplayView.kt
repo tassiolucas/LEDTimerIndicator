@@ -79,7 +79,6 @@ class LedDisplayView : View {
         ledPaint.alpha = FULL_ALPHA
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
@@ -92,7 +91,6 @@ class LedDisplayView : View {
         invalidate()
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedOne(canvas: Canvas, isOn: Boolean) {
         ledStartX = ((width / DELTA) * DOUBLE).toFloat()
         ledStartY = ((height / DELTA) * DOUBLE).toFloat()
@@ -101,10 +99,12 @@ class LedDisplayView : View {
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        else
+            canvas.drawLine(ledStartX, ledStartY, ledStopX, ledStopY, ledPaint)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedTwo(canvas: Canvas, isOn: Boolean) {
         ledStartX = ((width / DELTA) * QUADRUPLE).toFloat()
         ledStartY = (height / DELTA).toFloat()
@@ -113,10 +113,12 @@ class LedDisplayView : View {
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        else
+            canvas.drawLine(ledStartX, ledStartY, ledStopX, ledStopY, ledPaint)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedThree(canvas: Canvas, isOn: Boolean) {
         ledStartX = (width.toFloat() - ((width.toFloat() / DELTA) * DOUBLE)).toFloat()
         ledStartY = ((height / DELTA) * DOUBLE).toFloat()
@@ -125,10 +127,12 @@ class LedDisplayView : View {
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        else
+            canvas.drawLine(ledStartX, ledStartY, ledStopX, ledStopY, ledPaint)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedFour(canvas: Canvas, isOn: Boolean) {
         ledStartX = (height / DELTA).toFloat()
         ledStartY = ((height / DOUBLE) + (height / DELTA)).toFloat()
@@ -137,10 +141,12 @@ class LedDisplayView : View {
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        else
+            canvas.drawLine(ledStartX, ledStartY, ledStopX, ledStopY, ledPaint)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedFive(canvas: Canvas, isOn: Boolean) {
         ledStartX = ((width / DELTA) * QUADRUPLE).toFloat()
         ledStartY = (height / DOUBLE).toFloat()
@@ -149,10 +155,12 @@ class LedDisplayView : View {
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        else
+            canvas.drawLine(ledStartX, ledStartY, ledStopX, ledStopY, ledPaint)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedSix(canvas: Canvas, isOn: Boolean) {
         ledStartX = ((width / DELTA) * QUADRUPLE).toFloat()
         ledStartY = (height - (height / DELTA)).toFloat()
@@ -161,10 +169,12 @@ class LedDisplayView : View {
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        else
+            canvas.drawLine(ledStartX, ledStartY, ledStopX, ledStopY, ledPaint)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setLedSeven(canvas: Canvas, isOn: Boolean) {
         ledStartX = (width - ((width / DELTA) * DOUBLE)).toFloat()
         ledStartY = ((height / DOUBLE) + (height / DELTA)).toFloat()
@@ -173,7 +183,10 @@ class LedDisplayView : View {
 
         setLedState(isOn)
 
-        canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            canvas.drawRoundRect(ledStartX, ledStartY, ledStopX, ledStopY, CORNER_RADIUS, CORNER_RADIUS, ledPaint)
+        else
+            canvas.drawLine(ledStartX, ledStartY, ledStopX, ledStopY, ledPaint)
     }
 
     private fun setLedState(isOn: Boolean) {
@@ -224,7 +237,6 @@ class LedDisplayView : View {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setDrawValue(canvas: Canvas, value: Int) {
         when(value) {
             0 -> {
